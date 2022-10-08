@@ -1,4 +1,6 @@
-# s3 buckets
+####################################
+# S3 Storage buckets
+####################################
 variable "storage_buckets" {
   type        = set(string)
   description = "Define here how many storages you will have and each one name"
@@ -27,7 +29,10 @@ variable "airflow_bucket_name" {
   type        = string
   description = "Bucket that airflow will use to store dags"
 }
+
+####################################
 # general information
+####################################
 variable "region" {
   type        = string
   description = "AWS Region where the environment and its resources will be created"
@@ -46,7 +51,9 @@ variable "airflow_version" {
   default     = "2.0.2"
 }
 
+####################################
 # s3 configuration
+####################################
 variable "source_bucket_arn" {
   type        = string
   description = "ARN of the bucket in which DAGs, Plugin and Requirements are put"
@@ -75,14 +82,18 @@ variable "requirements_s3_object_version" {
   type    = string
 }
 
+####################################
 # airflow.cfg values
+####################################
 variable "airflow_configuration_options" {
   description = "additional configuration to overwrite airflows standard config"
   type        = map(string)
   default     = {}
 }
 
+####################################
 # networking
+####################################
 variable "vpc_id" {
   description = "VPC id of the VPC in which the environments resources are created"
   type        = string
@@ -117,14 +128,18 @@ variable "additional_associated_security_group_ids" {
   default     = []
 }
 
+####################################
 # iam
+####################################
 variable "additional_execution_role_policy_document_json" {
   description = "Additional permissions to attach to the base mwaa execution role"
   type        = string
   default     = "{}"
 }
 
+####################################
 # scaling
+####################################
 variable "max_workers" {
   default     = "10"
   description = "numeric string, min 1"
@@ -140,7 +155,9 @@ variable "environment_class" {
   type    = string
 }
 
+####################################
 # security
+####################################
 variable "webserver_access_mode" {
   description = "Default: PRIVATE_ONLY"
   type        = string
@@ -152,7 +169,9 @@ variable "kms_key_arn" {
   default     = null
 }
 
+####################################
 # tags and logging
+####################################
 variable "tags" {
   type    = map(string)
   default = {}
@@ -203,7 +222,9 @@ variable "worker_logs_level" {
   default     = "WARNING"
 }
 
+####################################
 # maintenance
+####################################
 variable "weekly_maintenance_window_start" {
   type        = string
   description = "The day and time of the week in Coordinated Universal Time (UTC) 24-hour standard time to start weekly maintenance updates of your environment in the following format: DAY:HH:MM. For example: TUE:03:30. You can specify a start time in 30 minute increments only"

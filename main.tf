@@ -1,4 +1,6 @@
+####################################
 # S3 Storage buckets
+####################################
 resource "aws_kms_key" "encryption-key" {
   description             = "This key is used to encrypt datalake S3 bucket"
   deletion_window_in_days = var.kms_key_deletion_window
@@ -48,7 +50,9 @@ resource "aws_s3_bucket_public_access_block" "access-policy" {
 
 }
 
+####################################
 # Airflow Bucket
+####################################
 resource "aws_s3_bucket" "mwaa" {
   bucket = var.airflow_bucket_name
 }
@@ -68,7 +72,9 @@ resource "aws_s3_bucket_public_access_block" "mwaa" {
   restrict_public_buckets = true
 }
 
+####################################
 # Airflow
+####################################
 resource "aws_mwaa_environment" "this" {
   airflow_configuration_options = var.airflow_configuration_options
 
