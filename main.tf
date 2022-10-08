@@ -1,3 +1,24 @@
+# Airflow Bucket
+resource "aws_s3_bucket" "mwaa" {
+  bucket = var.bucket_name
+}
+
+resource "aws_s3_bucket_versioning" "mwaa" {
+  bucket = aws_s3_bucket.mwaa.bucket
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "mwaa" {
+  bucket                  = aws_s3_bucket.mwaa.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# Airflow
 resource "aws_mwaa_environment" "this" {
   airflow_configuration_options = var.airflow_configuration_options
 

@@ -1,3 +1,9 @@
+# bucket vars
+variable "bucket_name" {
+  type = string
+  description = "Bucket that airflow will use to store dags"
+}
+
 # general information
 variable "region" {
   type        = string
