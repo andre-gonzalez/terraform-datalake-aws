@@ -1,6 +1,56 @@
+# S3 Storage buckets
+resource "aws_kms_key" "encryption-key" {
+  description             = "This key is used to encrypt datalake S3 bucket"
+  deletion_window_in_days = var.kms_key_deletion_window
+}
+
+resource "aws_s3_bucket" "storage_buckets" {
+  for_each = var.storage_buckets
+  bucket   = "${var.storage_buckets_prefix}-each.value-${var.storage_buckets_suffix}"
+
+  tags = merge({
+  }, var.tags)
+}
+
+resource "aws_s3_bucket_acl" "storage_buckets_acl" {
+  for_each = var.storage_buckets
+  bucket   = aws_s3_bucket.storage_buckets.id
+  acl      = "private"
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "s3-encryption" {
+  for_each = var.storage_buckets
+  bucket   = aws_s3_bucket.storage_buckets.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.encryption-key.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "s3-versioning" {
+  for_each = var.storage_buckets
+  bucket   = aws_s3_bucket.storage_buckets.id
+  versioning_configuration {
+    status = var.bronze_s3_versioning
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "access-policy" {
+  bucket = aws_s3_bucket.storage_buckets.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+}
+
 # Airflow Bucket
 resource "aws_s3_bucket" "mwaa" {
-  bucket = var.bucket_name
+  bucket = var.airflow_bucket_name
 }
 
 resource "aws_s3_bucket_versioning" "mwaa" {

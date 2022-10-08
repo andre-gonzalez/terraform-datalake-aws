@@ -1,9 +1,32 @@
-# bucket vars
-variable "bucket_name" {
-  type = string
+# s3 buckets
+variable "storage_buckets" {
+  type        = set(string)
+  description = "Define here how many storages you will have and each one name"
+  default     = ["bronze", "silver", "gold"]
+}
+variable "storage_buckets_prefix" {
+  type        = string
+  description = "Unique suffix in all buckts s3 in aws to append to S3 storage of the datalake"
+  default     = "datalake"
+}
+variable "storage_buckets_suffix" {
+  type        = string
+  description = "Unique suffix in all buckts s3 in aws to append to S3 storage of the datalake"
+}
+variable "kms_key_deletion_window" {
+  type        = string
+  description = "S3 buckets kms key deletion window"
+  default     = 10
+}
+variable "bronze_s3_versioning" {
+  type        = string
+  description = "If versioning is enabled. Options are Enabled or Disabled"
+  default     = "Enabled"
+}
+variable "airflow_bucket_name" {
+  type        = string
   description = "Bucket that airflow will use to store dags"
 }
-
 # general information
 variable "region" {
   type        = string
